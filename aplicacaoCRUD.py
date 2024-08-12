@@ -76,14 +76,14 @@ class PrincipalBD:
 
         self.lblValor.place(x=100, y=210)
         self.txtValor.place(x=250, y=210)
-#aqui atençao
+
         self.btnCadastrar.place(x=100, y=250)
         self.btnAtualizar.place(x=200, y=250)
         self.btnExcluir.place(x=300, y=250)
         self.btnLimpar.place(x=400, y=250)
 
         self.treeProdutos.place(x=100, y=300)
-        self.verscrlbar.place(x=605, y=300, height=225)
+        self.verscrlbar.place(x=650, y=300, height=225)
         self.carregarDadosIniciais()
 
     # -----------------------------------------------------------------------------
@@ -152,6 +152,12 @@ class PrincipalBD:
             print('Não foi possível ler os dados.')
         return ident, tatuador, cliente, whatsapp, descricao, valor
 
+    def fLerId(self):
+        print("************ Lendo Id ***********")
+        ident = int(self.txtId.get())
+        print('id', ident)
+        return ident
+
     # -----------------------------------------------------------------------------
     # Cadastrar Produto
     # -----------------------------------------------------------------------------
@@ -161,10 +167,8 @@ class PrincipalBD:
             ident, tatuador, cliente, whatsapp, descricao, valor = self.fLerCampos()
             self.objBD.inserirDados(tatuador, cliente, whatsapp, descricao, valor)
             self.treeProdutos.insert('', 'end',
-                                     iid=self.iid,
                                      values=(ident, tatuador, cliente, whatsapp, descricao, valor))
-            self.iid = self.iid + 1
-            self.id = self.id + 1
+
             self.fLimparTela()
             print('Produto Cadastrado com Sucesso!')
         except:
@@ -177,7 +181,7 @@ class PrincipalBD:
         try:
             print("************ dados dsponíveis ***********")
             ident, tatuador, cliente, whatsapp, descricao, valor = self.fLerCampos()
-            self.objBD.atualizarDados(tatuador, cliente, whatsapp, descricao, valor)
+            self.objBD.atualizarDados(ident, tatuador, cliente, whatsapp, descricao, valor)
             # recarregar dados na tela
             self.treeProdutos.delete(*self.treeProdutos.get_children())
             self.carregarDadosIniciais()
@@ -192,9 +196,11 @@ class PrincipalBD:
     def fExcluirProduto(self):
         try:
             print("************ dados dsponíveis ***********")
-            ident, tatuador, cliente, whatsapp, descricao, valor = self.fLerCampos()
-            self.objBD.excluirDados(id)
-            # recarregar dados na tela
+            ident = self.fLerId()
+            print(ident)
+            self.objBD.excluirDados(ident)
+        # recarregar dados na tela
+
             self.treeProdutos.delete(*self.treeProdutos.get_children())
             self.carregarDadosIniciais()
             self.fLimparTela()
@@ -208,7 +214,7 @@ class PrincipalBD:
     def fLimparTela(self):
         try:
             print("************ dados dsponíveis ***********")
-            self.txtID.delete(0, tk.END)
+            self.txtId.delete(0, tk.END)
             self.txtTatuador.delete(0, tk.END)
             self.txtCliente.delete(0, tk.END)
             self.txtWhatsapp.delete(0, tk.END)

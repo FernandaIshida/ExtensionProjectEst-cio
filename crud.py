@@ -52,8 +52,8 @@ class AppBD:
         try:
             self.abrirConexao()
             cursor = self.connection.cursor()
-            postgres_insert_query = """ INSERT INTO public."REDSPIDER" 
-          ("Tatuador", "Cliente", "Whatsapp", "Descricao", "Valor") VALUES (%s,%s,%s,%s,%s)"""
+            postgres_insert_query = """ INSERT INTO public."redspider" 
+          ("tatuador", "cliente", "whatsapp", "descricao", "valor") VALUES (%s,%s,%s,%s,%s)"""
             record_to_insert = (tatuador, cliente, whatsapp, descricao, valor)
             cursor.execute(postgres_insert_query, record_to_insert)
             self.connection.commit()
@@ -72,28 +72,28 @@ class AppBD:
     # -----------------------------------------------------------------------------
     # Atualizar Produto
     # -----------------------------------------------------------------------------
-    def atualizarDados(self, id, tatuador, cliente, whatsapp, descricao, valor):
+    def atualizarDados(self, ident, tatuador, cliente, whatsapp, descricao, valor):
         try:
             self.abrirConexao()
             cursor = self.connection.cursor()
 
             print("Registro Antes da Atualização ")
-            sql_select_query = """select * from public."REDSPIDER" 
-            where "ID" = %s"""
-            cursor.execute(sql_select_query, (tatuador,))
+            sql_select_query = """select * from public."redspider" 
+            where "id" = %s"""
+            cursor.execute(sql_select_query, (ident,))
             record = cursor.fetchone()
             print(record)
             # Atualizar registro
-            sql_update_query = """Update public."REDSPIDER" set "Tatuador" = %s, "Cliente" = %s, 
-            "Whatsapp" = %s, "Descricao" = %s, "Valor" = %s where "ID" = %s"""
-            cursor.execute(sql_update_query, (tatuador, cliente, whatsapp, descricao, valor))
+            sql_update_query = """Update public."redspider" set "tatuador" = %s, "cliente" = %s, 
+            "whatsapp" = %s, "descricao" = %s, "valor" = %s where "id" = %s"""
+            cursor.execute(sql_update_query, (tatuador, cliente, whatsapp, descricao, valor, ident))
             self.connection.commit()
             count = cursor.rowcount
             print(count, "Registro atualizado com sucesso! ")
             print("Registro Depois da Atualização ")
-            sql_select_query = """select * from public."REDSPIDER" 
-            where "ID" = %s"""
-            cursor.execute(sql_select_query, (id,))
+            sql_select_query = """select * from public."redspider" 
+            where "id" = %s"""
+            cursor.execute(sql_select_query, (ident,))
             record = cursor.fetchone()
             print(record)
         except (Exception, psycopg2.Error) as error:
@@ -113,8 +113,8 @@ class AppBD:
             self.abrirConexao()
             cursor = self.connection.cursor()
             # Atualizar registro
-            sql_delete_query = """Delete from public."REDSPIDER" 
-            where "ID" = %s"""
+            sql_delete_query = """Delete from public."redspider" 
+            where "id" = %s"""
             cursor.execute(sql_delete_query, (id,))
 
             self.connection.commit()
